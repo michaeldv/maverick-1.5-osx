@@ -21,10 +21,18 @@
 #define ENGINE_VERSION					VERSION_NUMBER
 #elif defined(__linux__)
 #define ENGINE_VERSION					VERSION_NUMBER
+#elif defined(__APPLE__)
+#define ENGINE_VERSION					VERSION_NUMBER " x64 osx"
 #endif
 
 #define ENGINE_AUTHOR						"Steve Maughan"
 #include <cassert>
+
+#if defined(__APPLE__)
+#include <pthread.h>
+#define HANDLE uint64_t
+#define Sleep(value) sleep(value)
+#endif
 
 //===========================================================//
 // Primitive Logic

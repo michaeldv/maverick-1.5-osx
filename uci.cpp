@@ -65,7 +65,8 @@ void create_uci_engine_thread()
     SetThreadPriority(thread_handle, THREAD_PRIORITY_NORMAL); // needed for Fritz GUI! :-))
 #else
     pthread_t SearchThread;
-    pthread_create(&SearchThread, NULL, engine_loop, &threadID);
+    // pthread_create(&SearchThread, NULL, engine_loop, &threadID);
+    pthread_create((pthread_t *)&SearchThread, NULL, (void *(*)(void *))engine_loop, (void *)&threadID);
 #endif
 }
 
@@ -165,8 +166,10 @@ void listen_for_uci_input()
             test_book();
 
     }
+#if defined(_WIN32)
     WaitForSingleObject(thread_handle, INFINITE);
     CloseHandle(thread_handle);
+#endif
 }
 
 void send_command(char *t)

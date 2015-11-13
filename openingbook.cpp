@@ -27,7 +27,7 @@
 #include "procs.h"
 
 
-#if defined(__arm__) || defined(__linux__)
+#if defined(__arm__) || defined(__linux__) || defined(__APPLE__)
 
 void close_book()
 {

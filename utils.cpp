@@ -19,10 +19,22 @@
 #include "procs.h"
 #include "bittwiddle.h"
 
+#if defined(__linux__) || defined(__APPLE__)
+#include <sys/time.h>
+
+unsigned GetTickCount() {
+    struct timeval tv;
+    if (gettimeofday(&tv, NULL) != 0) {
+        return 0;
+    }
+
+    return tv.tv_sec * 1000 + tv.tv_usec / 1000;
+}
+#endif
 
 unsigned long time_now()
 {
-#if defined(__arm__) || defined(__linux__) || defined(__MINGW32__)
+#if defined(__arm__) || defined(__linux__) || defined(__MINGW32__) || defined(__APPLE__)
     return GetTickCount();
 
 #elif defined _WIN32 && !_WIN64

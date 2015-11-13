@@ -5,9 +5,13 @@
 //
 //===========================================================//
 
+#if !defined(__APPLE__)
 #include <intrin.h>
+#else
+#include <pmmintrin.h>
+#endif
 
-#if (defined(_WIN32) && !defined(_WIN64)) || defined(__arm__) || defined(__linux__)
+#if (defined(_WIN32) && !defined(_WIN64)) || defined(__arm__) || defined(__linux__) || defined(__APPLE__)
 
 static inline t_chess_square bitscan(t_bitboard b)
 {
@@ -16,6 +20,7 @@ static inline t_chess_square bitscan(t_bitboard b)
     return bitscan_table[folded * 0x78291ACF >> 26];
 }
 
+#if !defined(__APPLE__)
 static inline int popcount(t_bitboard b)
 {
     int i = 0;
@@ -26,6 +31,9 @@ static inline int popcount(t_bitboard b)
     }
     return(i);
 }
+#else
+#define popcount(value) __builtin_popcountll(value)
+#endif
 
 static inline t_chess_square bitscan_reset(t_bitboard *b)
 {
